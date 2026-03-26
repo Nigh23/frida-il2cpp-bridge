@@ -13,19 +13,25 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install build dependencies
-      run: sudo apt-get update && sudo apt-get install -y build-essential
+    # 1. 安装 Node.js 环境（核心：项目是 TypeScript 编写）
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'  # 匹配项目要求的 Node.js 版本
 
-    - name: Build with Make
-      run: make
+    # 2. 安装系统依赖 + npm 依赖
+    - name: Install dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install -y build-essential
+        npm install  # 安装项目所需的 npm 包
 
-    # ✅ 新增：列出构建后所有文件，确认产物路径
-    - name: List all files after build
-      run: ls -laR
+    # 3. 执行 TypeScript 构建（生成最终产物）
+    - name: Build with npm
+      run: npm run build  # 对应 package.json 里的 build 脚本
 
-    # ✅ 临时注释上传步骤，先看输出
-    # - name: Upload build artifacts
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: frida-il2cpp-bridge-build
-    #     path: build/
+    # 4. 上传构建产物（产物默认输出到 dist/ 目录）
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frida-il2cpp-bridge-build
+        path: dist/  # TypeScript 编译后产物目录
