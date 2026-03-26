@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. 拉取代码（升级到 v4，消除 Node.js 弃用警告）
+    # 1. 拉取代码（消除 Node.js 弃用警告）
     - uses: actions/checkout@v4
 
     # 2. 配置 Node.js 环境
@@ -20,19 +20,21 @@ jobs:
       with:
         node-version: '20.x'
 
-    # 3. 安装系统依赖 + 项目 npm 依赖
+    # 3. 安装系统依赖 + 项目依赖
     - name: Install dependencies
       run: |
         sudo apt-get update && sudo apt-get install -y build-essential
         npm install
 
-    # 4. 编译 TypeScript 代码（用 npx tsc 确保使用项目本地版本）
-    - name: Build with TypeScript
-      run: npx tsc --project tsconfig.json
+    # 4. 执行完整构建流程（生成 frida-il2cpp-bridge.js）
+    - name: Build with make dist
+      run: make dist
 
-    # 5. 上传构建产物（dist/ 目录）
-    - name: Upload build artifacts
+    # 5. 上传最终产物（包含 frida-il2cpp-bridge.js）
+    - name: Upload final artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: frida-il2cpp-bridge-build
-        path: dist/
+        name: frida-il2cpp-bridge-final
+        path: |
+          frida-il2cpp-bridge.js  # 直接上传最终脚本
+          dist/                   # 同时上传中间产物（可选）
