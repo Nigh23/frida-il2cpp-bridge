@@ -11,28 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. 拉取代码（升级到 v4，消除 Node.js 弃用警告）
     - uses: actions/checkout@v4
 
-    # 1. 安装 Node.js 环境
+    # 2. 配置 Node.js 环境
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
 
-    # 2. 安装系统依赖 + npm 依赖 + TypeScript 编译器
+    # 3. 安装系统依赖 + 项目 npm 依赖
     - name: Install dependencies
       run: |
         sudo apt-get update && sudo apt-get install -y build-essential
         npm install
-        npm install -g typescript  # 全局安装 TypeScript 编译器
 
-    # 3. 直接用 tsc 编译 TypeScript 代码（核心修复）
+    # 4. 编译 TypeScript 代码（用 npx tsc 确保使用项目本地版本）
     - name: Build with TypeScript
-      run: tsc --project tsconfig.json  # 根据 tsconfig.json 编译
+      run: npx tsc --project tsconfig.json
 
-    # 4. 上传构建产物（根据 tsconfig.json 的 outDir 配置）
+    # 5. 上传构建产物（dist/ 目录）
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: frida-il2cpp-bridge-build
-        path: lib/  # 若 tsconfig.json 中 outDir 是 dist，则改为 dist/
+        path: dist/
