@@ -13,8 +13,8 @@
     "plugins": [ 
       { "transform": "ts-transformer-inline-file/transformer" }
     ],
-    "rootDir": "./lib",         // ✅ 显式指定源码根目录
-    "ignoreDeprecations": "6.0" // ✅ 正确格式：无 -- 前缀，值为字符串 "6.0"
+    "rootDir": "./lib"         // ✅ 显式指定源码根目录，解决布局问题
+    // ❌ 移除了不被支持的 ignoreDeprecations 选项
   },
   "exclude": ["dist", "test", "example"]
 }
