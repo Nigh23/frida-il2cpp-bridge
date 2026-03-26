@@ -3,7 +3,7 @@
     "target": "es2022",
     "lib": ["es2021"],
     "moduleResolution": "node",
-    "outDir": "dist", // 只保留 outDir
+    "outDir": "dist",          // ✅ 只保留 outDir，删除冲突的 outFile
     "sourceRoot": ".",
     "declaration": true,
     "experimentalDecorators": true,
@@ -13,8 +13,8 @@
     "plugins": [ 
       { "transform": "ts-transformer-inline-file/transformer" }
     ],
-    "rootDir": "./lib",
-    "ignoreDeprecations": "6.0"
+    "rootDir": "./lib",         // ✅ 显式指定源码目录
+    "ignoreDeprecations": "6.0" // ✅ 正确格式：无 -- 前缀，值为字符串 "6.0"
   },
   "exclude": ["dist", "test", "example"]
 }
