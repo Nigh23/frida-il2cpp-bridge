@@ -19,9 +19,13 @@ jobs:
     - name: Build with Make
       run: make
 
-    # ✅ 新增：上传构建产物（核心步骤）
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: frida-il2cpp-bridge-build  # 下载包的名字
-        path: build/  # 项目构建产物所在目录（frida-il2cpp-bridge 默认输出到 build/）
+    # ✅ 新增：列出构建后所有文件，确认产物路径
+    - name: List all files after build
+      run: ls -laR
+
+    # ✅ 临时注释上传步骤，先看输出
+    # - name: Upload build artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: frida-il2cpp-bridge-build
+    #     path: build/
